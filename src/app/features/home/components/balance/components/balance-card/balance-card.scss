@@ -3,5 +3,9 @@
 }
 
 .outcome {
-  color: var(--mat-sys-error);
+  color: var(--custom-color--red);
+}
+
+.zero{
+  color: var(--mat-sys-secondary);
 }

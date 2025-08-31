@@ -13,8 +13,8 @@ export class Home {
 
   transactions = signal([
     { values: 1000, type: 'income' },
-    { values: 250, type: 'outcome' },
-    { values: 250, type: 'outcome' },
+    { values: 500, type: 'outcome' },
+    { values: 500, type: 'outcome' },
 
   ]);
 
