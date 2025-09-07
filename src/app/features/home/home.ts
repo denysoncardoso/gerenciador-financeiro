@@ -1,9 +1,11 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {Balance} from './components/balance/balance';
 import {TransactionItem} from './components/transaction-item/transaction-item';
 import {Transaction} from '../../shared/transactions/interfaces/transaction';
 import {TransactionType} from '../../shared/transactions/enums/transactions-types';
 import {NoTransactions} from './components/no-transactions/no-transactions';
+import {HttpClient} from '@angular/common/http';
+import {TransactionsService} from '../../shared/transactions/services/transactions';
 
 
 @Component({
@@ -16,14 +18,30 @@ import {NoTransactions} from './components/no-transactions/no-transactions';
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home {
+export class Home implements OnInit{
 
-  transactions = signal<Transaction[]>([
+  // private httpClient = inject(HttpClient);
 
-    { title: 'Salário', value: 1000, type: TransactionType.income },
-    { title: 'Aluguel', value: 500, type: TransactionType.outcome },
-    { title: 'Comida', value: 500, type: TransactionType.outcome},
+  private transactionsService = inject(TransactionsService);
 
-  ]);
+  transactions = signal<Transaction[]>([]);
 
+
+  ngOnInit() {
+    this.getTransaction();
+  }
+
+  private getTransaction() {
+    this.transactionsService.getAll().subscribe({
+      next: (transactions) => {
+        this.transactions.set(transactions);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        console.log('complete');
+      }
+    })
+  }
 }
