@@ -1,17 +1,66 @@
 <form [formGroup]="form">
 
-  <mat-form-field>
-    <mat-label>Enter your email</mat-label>
+
+  <div class="mb-24">
+    <mat-button-toggle-group formControlName="type">
+      <mat-button-toggle [value]="transationType.outcome"
+      >Gasto
+      </mat-button-toggle
+      >
+      <mat-button-toggle [value]="transationType.income"
+      >Ganho
+      </mat-button-toggle
+      >
+    </mat-button-toggle-group>
+
+    @if (form.controls.type.hasError("required")) {
+      <mat-error>Campo obrigatório</mat-error>
+    }
+  </div>
+
+  <mat-form-field class="w-100 mb-16">
+    <mat-label>Título</mat-label>
     <input
       matInput
       placeholder="Digite o título da transação"
-      [formControlName]="'title'"
+      formControlName="title"
       required
     />
-      @if (form.controls.title.invalid) {
-        <mat-error>Campo Obrigatório</mat-error>
-      }
+
+    @if (form.controls.title.hasError('required')) {
+      <mat-error>Campo Obrigatório</mat-error>
+    }
   </mat-form-field>
+
+  <mat-form-field class="w-100 mb-16">
+    <mat-label>Valor</mat-label>
+    <input
+      matInput
+      placeholder="Digite o valor da transação"
+      [formControlName]="'value'"
+      required
+      mask="separator.2"
+      thousandSeparator="."
+      decimalMarker=","
+    />
+    <span matTextPrefix>R$ &nbsp;</span>
+
+    @if (form.controls.title.hasError('required')) {
+      <mat-error>Campo Obrigatório</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="submit-container">
+    <button
+      mat-flat-button="raised"
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >Salvar
+    </button>
+
+  </div>
+
 
 </form>
 
