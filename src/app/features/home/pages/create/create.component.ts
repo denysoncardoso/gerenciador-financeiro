@@ -12,6 +12,7 @@ import {NgxMaskDirective} from 'ngx-mask';
 import {TransactionsService} from '../../../../shared/transactions/services/transactions.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {FeedbackService} from '../../../../shared/feedback/services/feedback.service';
 
 
 @Component({
@@ -33,7 +34,7 @@ export class CreateComponent {
   //injects
   private transationsService = inject(TransactionsService);
   private router = inject(Router);
-  private snackBar = inject(MatSnackBar);
+  private feedbackService = inject(FeedbackService);
 
   readonly transationType = TransactionType;
 
@@ -65,12 +66,7 @@ export class CreateComponent {
     this.transationsService.post(payload).subscribe({
       next: (transaction) => {
         this.router.navigate(['/']);
-        this.snackBar.open('Transação criada com sucesso!', 'Fechar', {
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: 'success-snack-bar',
-          duration: 3000,
-        });
+        this.feedbackService.success('')
       }
     });
   }

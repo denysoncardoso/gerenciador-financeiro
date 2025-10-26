@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import {provideHttpClient} from '@angular/common/http';
 import {provideEnvironmentNgxMask} from 'ngx-mask';
+import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig} from '@angular/material/snack-bar';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,6 +12,14 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideEnvironmentNgxMask()
-  ]
+    provideEnvironmentNgxMask(),
+    {
+      provide:MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue:{
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+      } as MatSnackBarConfig,
+    }
+  ],
 };
