@@ -3,9 +3,9 @@ import {Balance} from './components/balance/balance';
 import {TransactionItem} from './components/transaction-item/transaction-item';
 import {Transaction} from '../../shared/transactions/interfaces/transaction';
 import {NoTransactions} from './components/no-transactions/no-transactions';
-import {TransactionsService} from '../../shared/transactions/services/transactions';
 import {MatButtonModule} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
+import {TransactionsService} from '../../shared/transactions/services/transactions.service';
 
 
 @Component({

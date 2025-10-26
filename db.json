@@ -1,9 +1,34 @@
-﻿{
+{
   "transactions": [
-
-    { "id": 1, "title": "Salário", "value": 1000, "type": "income" },
-    { "id": 2, "title": "Aluguel", "value": 500, "type": "outcome" },
-    { "id": 3, "title": "Comida", "value": 500, "type": "outcome" },
-    { "id": 4, "title": "Transporte", "value": 150, "type": "outcome" }
+    {
+      "id": 1,
+      "title": "Salário",
+      "value": 3000,
+      "type": "income"
+    },
+    {
+      "id": 2,
+      "title": "Aluguel",
+      "value": 500,
+      "type": "outcome"
+    },
+    {
+      "id": 3,
+      "title": "Comida",
+      "value": 500,
+      "type": "outcome"
+    },
+    {
+      "id": 4,
+      "title": "Transporte",
+      "value": 150,
+      "type": "outcome"
+    },
+    {
+      "title": "Frelas",
+      "value": 2000,
+      "type": "income",
+      "id": 5
+    }
   ]
 }

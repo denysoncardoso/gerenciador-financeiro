@@ -10,6 +10,8 @@ import {TransactionType} from '../../../../shared/transactions/enums/transaction
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {NgxMaskDirective} from 'ngx-mask';
 import {TransactionsService} from '../../../../shared/transactions/services/transactions.service';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -18,7 +20,6 @@ import {TransactionsService} from '../../../../shared/transactions/services/tran
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    JsonPipe,
     MatButtonModule,
     MatButtonToggleModule,
     NgxMaskDirective,
@@ -31,6 +32,8 @@ export class CreateComponent {
 
   //injects
   private transationsService = inject(TransactionsService);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   readonly transationType = TransactionType;
 
@@ -44,7 +47,9 @@ export class CreateComponent {
     value: new FormControl(0, {
       validators: [Validators.required]
     }),
-    type: new FormControl('', {})
+    type: new FormControl('', {
+      validators: [Validators.required]
+    })
 
   });
 
@@ -59,7 +64,13 @@ export class CreateComponent {
 
     this.transationsService.post(payload).subscribe({
       next: (transaction) => {
-
+        this.router.navigate(['/']);
+        this.snackBar.open('Transação criada com sucesso!', 'Fechar', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: 'success-snack-bar',
+          duration: 3000,
+        });
       }
     });
   }
