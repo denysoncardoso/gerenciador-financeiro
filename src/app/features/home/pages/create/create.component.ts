@@ -1,14 +1,15 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {JsonPipe} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 
-import {Transaction} from '../../../../shared/transactions/interfaces/transaction';
+import {Transaction, TransactionPayload} from '../../../../shared/transactions/interfaces/transaction';
 import {TransactionType} from '../../../../shared/transactions/enums/transactions-types';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {NgxMaskDirective} from 'ngx-mask';
+import {TransactionsService} from '../../../../shared/transactions/services/transactions.service';
 
 
 @Component({
@@ -27,20 +28,40 @@ import {NgxMaskDirective} from 'ngx-mask';
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  transaction = input<Transaction>();
+
+  //injects
+  private transationsService = inject(TransactionsService);
 
   readonly transationType = TransactionType;
+
+
 
   form = new FormGroup({
 
     title: new FormControl('', {
       validators: [Validators.required]
     }),
-    value: new FormControl('', {
+    value: new FormControl(0, {
       validators: [Validators.required]
     }),
     type: new FormControl('', {})
 
-  })
+  });
+
+  submit(){
+    if (this.form.invalid) return;
+
+    const payload: TransactionPayload = {
+      title: this.form.value.title as string,
+      value: this.form.value.value as number,
+      type: this.form.value.type as TransactionType,
+    };
+
+    this.transationsService.post(payload).subscribe({
+      next: (transaction) => {
+
+      }
+    });
+  }
 
 }
