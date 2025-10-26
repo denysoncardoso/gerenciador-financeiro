@@ -44,7 +44,7 @@ export class CreateComponent {
     title: new FormControl('', {
       validators: [Validators.required]
     }),
-    value: new FormControl(0, {
+    value: new FormControl(null, {
       validators: [Validators.required]
     }),
     type: new FormControl('', {
@@ -58,7 +58,7 @@ export class CreateComponent {
 
     const payload: TransactionPayload = {
       title: this.form.value.title as string,
-      value: this.form.value.value as number,
+      value: Number(this.form.value.value ?? 0),
       type: this.form.value.type as TransactionType,
     };
 
