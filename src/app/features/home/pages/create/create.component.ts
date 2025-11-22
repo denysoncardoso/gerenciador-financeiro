@@ -2,16 +2,13 @@ import {Component, inject, input} from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {JsonPipe} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
-
-import {Transaction, TransactionPayload} from '../../../../shared/transactions/interfaces/transaction';
+import {TransactionPayload} from '../../../../shared/transactions/interfaces/transaction';
 import {TransactionType} from '../../../../shared/transactions/enums/transactions-types';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {NgxMaskDirective} from 'ngx-mask';
 import {TransactionsService} from '../../../../shared/transactions/services/transactions.service';
 import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {FeedbackService} from '../../../../shared/feedback/services/feedback.service';
 
 
@@ -39,7 +36,6 @@ export class CreateComponent {
   readonly transationType = TransactionType;
 
 
-
   form = new FormGroup({
 
     title: new FormControl('', {
@@ -54,7 +50,7 @@ export class CreateComponent {
 
   });
 
-  submit(){
+  submit() {
     if (this.form.invalid) return;
 
     const payload: TransactionPayload = {
@@ -65,8 +61,9 @@ export class CreateComponent {
 
     this.transationsService.post(payload).subscribe({
       next: (transaction) => {
+        this.feedbackService.success('Transação criada com sucesso!');
+
         this.router.navigate(['/']);
-        this.feedbackService.success('')
       }
     });
   }
