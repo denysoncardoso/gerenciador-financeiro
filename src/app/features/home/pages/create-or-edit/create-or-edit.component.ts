@@ -1,4 +1,4 @@
-import {Component, inject, input} from '@angular/core';
+import {Component, computed, inject, input} from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -27,55 +27,51 @@ import {FeedbackService} from '../../../../shared/feedback/services/feedback.ser
   styleUrl: './create-or-edit.component.scss'
 })
 export class CreateOrEditComponent {
-  private activatedRoute = inject(ActivatedRoute);
-
   //injects
   private transationsService = inject(TransactionsService);
   private router = inject(Router);
   private feedbackService = inject(FeedbackService);
 
+  transaction = input<Transaction>();
+
   readonly transationType = TransactionType;
 
-  get transaction(): Transaction {
-    return this.activatedRoute.snapshot.data['transaction'];
-  }
 
-  get isEditMode() {
-    return !!this.transaction;
-  }
+  isEdit =computed(() => this.transaction()?.id !== undefined);
 
-  form = new FormGroup({
+  form = computed(
+    () =>
+      new FormGroup({
+        title: new FormControl(this.transaction()?.title ?? '', {
+          validators: [Validators.required]
+        }),
+        value: new FormControl(this.transaction()?.value ?? null, {
+          validators: [Validators.required]
+        }),
+        type: new FormControl(this.transaction()?.type ?? '', {
+          validators: [Validators.required]
+        })
 
-    title: new FormControl(this.transaction?.title ?? '', {
-      validators: [Validators.required]
-    }),
-    value: new FormControl(this.transaction?.value ?? null, {
-      validators: [Validators.required]
-    }),
-    type: new FormControl(this.transaction?.type ?? '', {
-      validators: [Validators.required]
-    })
-
-  });
+      }));
 
   submit() {
-    if (this.form.invalid) return;
+    if (this.form().invalid) return;
 
     const payload: TransactionPayload = {
-      title: this.form.value.title as string,
-      value: Number(this.form.value.value ?? 0),
-      type: this.form.value.type as TransactionType,
+      title: this.form().value.title as string,
+      value: Number(this.form().value.value ?? 0),
+      type: this.form().value.type as TransactionType,
     };
 
-    if(this.isEditMode) {
-      this.transationsService.put(this.transaction.id, payload).subscribe({
+    if (this.isEdit()) {
+      this.transationsService.put(this.transaction()!.id, payload).subscribe({
         next: (transaction) => {
           this.feedbackService.success('Transação atualizada com sucesso!');
 
           this.router.navigate(['/']);
         }
       });
-    }else {
+    } else {
       this.transationsService.post(payload).subscribe({
         next: (transaction) => {
           this.feedbackService.success('Transação criada com sucesso!');
