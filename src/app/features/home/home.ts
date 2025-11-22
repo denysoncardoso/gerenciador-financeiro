@@ -4,7 +4,7 @@ import {TransactionItem} from './components/transaction-item/transaction-item';
 import {Transaction} from '../../shared/transactions/interfaces/transaction';
 import {NoTransactions} from './components/no-transactions/no-transactions';
 import {MatButtonModule} from '@angular/material/button';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {TransactionsService} from '../../shared/transactions/services/transactions.service';
 
 
@@ -25,6 +25,7 @@ export class Home implements OnInit{
   // private httpClient = inject(HttpClient);
 
   private transactionsService = inject(TransactionsService);
+  private router = inject(Router);
 
   transactions = signal<Transaction[]>([]);
 
@@ -46,4 +47,9 @@ export class Home implements OnInit{
       }
     })
   }
+
+  editTransaction(transaction: Transaction) {
+    this.router.navigate(['edit', transaction.id]);
+  }
+
 }

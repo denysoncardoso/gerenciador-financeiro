@@ -3,12 +3,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
-import {TransactionPayload} from '../../../../shared/transactions/interfaces/transaction';
+import {Transaction, TransactionPayload} from '../../../../shared/transactions/interfaces/transaction';
 import {TransactionType} from '../../../../shared/transactions/enums/transactions-types';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {NgxMaskDirective} from 'ngx-mask';
 import {TransactionsService} from '../../../../shared/transactions/services/transactions.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FeedbackService} from '../../../../shared/feedback/services/feedback.service';
 
 
@@ -22,11 +22,12 @@ import {FeedbackService} from '../../../../shared/feedback/services/feedback.ser
     MatButtonToggleModule,
     NgxMaskDirective,
   ],
-  templateUrl: './create.component.html',
+  templateUrl: './create-or-edit.component.html',
   standalone: true,
-  styleUrl: './create.component.scss'
+  styleUrl: './create-or-edit.component.scss'
 })
-export class CreateComponent {
+export class CreateOrEditComponent {
+  private activatedRoute = inject(ActivatedRoute);
 
   //injects
   private transationsService = inject(TransactionsService);
@@ -35,16 +36,23 @@ export class CreateComponent {
 
   readonly transationType = TransactionType;
 
+  get transaction(): Transaction {
+    return this.activatedRoute.snapshot.data['transaction'];
+  }
+
+  get isEditMode() {
+    return !!this.transaction;
+  }
 
   form = new FormGroup({
 
-    title: new FormControl('', {
+    title: new FormControl(this.transaction?.title ?? '', {
       validators: [Validators.required]
     }),
-    value: new FormControl(null, {
+    value: new FormControl(this.transaction?.value ?? null, {
       validators: [Validators.required]
     }),
-    type: new FormControl('', {
+    type: new FormControl(this.transaction?.type ?? '', {
       validators: [Validators.required]
     })
 
@@ -59,13 +67,23 @@ export class CreateComponent {
       type: this.form.value.type as TransactionType,
     };
 
-    this.transationsService.post(payload).subscribe({
-      next: (transaction) => {
-        this.feedbackService.success('Transação criada com sucesso!');
+    if(this.isEditMode) {
+      this.transationsService.put(this.transaction.id, payload).subscribe({
+        next: (transaction) => {
+          this.feedbackService.success('Transação atualizada com sucesso!');
 
-        this.router.navigate(['/']);
-      }
-    });
+          this.router.navigate(['/']);
+        }
+      });
+    }else {
+      this.transationsService.post(payload).subscribe({
+        next: (transaction) => {
+          this.feedbackService.success('Transação criada com sucesso!');
+
+          this.router.navigate(['/']);
+        }
+      });
+    }
+
   }
-
 }

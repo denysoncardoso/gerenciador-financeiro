@@ -7,10 +7,10 @@
       "type": "income"
     },
     {
-      "id": 2,
       "title": "Aluguel",
-      "value": 500,
-      "type": "outcome"
+      "value": 1000,
+      "type": "outcome",
+      "id": 2
     },
     {
       "id": 3,
