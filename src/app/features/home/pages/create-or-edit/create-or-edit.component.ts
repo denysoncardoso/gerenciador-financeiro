@@ -10,6 +10,7 @@ import {NgxMaskDirective} from 'ngx-mask';
 import {TransactionsService} from '../../../../shared/transactions/services/transactions.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FeedbackService} from '../../../../shared/feedback/services/feedback.service';
+import {tap} from 'rxjs';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class CreateOrEditComponent {
   readonly transationType = TransactionType;
 
 
-  isEdit =computed(() => this.transaction()?.id !== undefined);
+  isEdit = computed(() => this.transaction()?.id !== undefined);
 
   form = computed(
     () =>
@@ -63,23 +64,30 @@ export class CreateOrEditComponent {
       type: this.form().value.type as TransactionType,
     };
 
+    this.createOrEdit(payload).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+    });
+  }
+
+  private createOrEdit(payload: TransactionPayload) {
     if (this.isEdit()) {
-      this.transationsService.put(this.transaction()!.id, payload).subscribe({
-        next: (transaction) => {
-          this.feedbackService.success('Transação atualizada com sucesso!');
-
-          this.router.navigate(['/']);
-        }
-      });
+      return this.transationsService
+        .put(this.transaction()!.id, payload)
+        .pipe(
+          tap(() =>
+            this.feedbackService.success('Transação atualizada com sucesso!')
+          ),
+        );
     } else {
-      this.transationsService.post(payload).subscribe({
-        next: (transaction) => {
-          this.feedbackService.success('Transação criada com sucesso!');
-
-          this.router.navigate(['/']);
-        }
-      });
+      return this.transationsService
+        .post(payload)
+        .pipe(
+          tap(() =>
+            this.feedbackService.success('Transação atualizada com sucesso!')
+          ),
+        );
     }
-
   }
 }
