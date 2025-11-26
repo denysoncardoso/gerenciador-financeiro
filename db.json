@@ -7,34 +7,22 @@
       "type": "income"
     },
     {
-      "title": "Aluguel",
-      "value": 250,
-      "type": "outcome",
-      "id": 2
-    },
-    {
-      "id": 3,
-      "title": "Comida",
-      "value": 500,
-      "type": "outcome"
-    },
-    {
-      "title": "Transporte",
-      "value": 250,
-      "type": "outcome",
-      "id": 4
-    },
-    {
       "title": "Frelas",
       "value": 2000,
       "type": "income",
       "id": 5
     },
     {
-      "title": "Aluguel2",
-      "value": 150,
+      "title": "Aluguel",
+      "value": 1500,
       "type": "outcome",
       "id": 6
+    },
+    {
+      "title": "Alimentação",
+      "value": 2000,
+      "type": "outcome",
+      "id": 7
     }
   ]
 }

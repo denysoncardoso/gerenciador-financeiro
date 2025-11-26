@@ -12,6 +12,6 @@
 
   <div class="card-actions">
     <button mat-button (click)="editTransaction.emit(transaction())">Editar</button>
-    <button mat-button>Excluir</button>
+    <button mat-button (click)="removeTransaction.emit(transaction())">Excluir</button>
   </div>
 </mat-card>

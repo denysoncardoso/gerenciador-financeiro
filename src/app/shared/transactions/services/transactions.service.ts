@@ -29,4 +29,9 @@ export class TransactionsService {
       `http://localhost:3000/transactions/${id}`, payload)
   }
 
+  delete(id: number) {
+    return this.httpClient.delete<Transaction>(
+      `http://localhost:3000/transactions/${id}`)
+  }
+
 }

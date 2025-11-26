@@ -6,6 +6,10 @@ import {NoTransactions} from './components/no-transactions/no-transactions';
 import {MatButtonModule} from '@angular/material/button';
 import {Router, RouterLink} from '@angular/router';
 import {TransactionsService} from '../../shared/transactions/services/transactions.service';
+import {FeedbackService} from '../../shared/feedback/services/feedback.service';
+import {MatDialog} from '@angular/material/dialog';
+import {filter} from 'rxjs';
+import {ConfirmationDialogService} from '../../shared/dialog/confirmation/services/confirmation-dialog.service';
 
 
 @Component({
@@ -20,18 +24,50 @@ import {TransactionsService} from '../../shared/transactions/services/transactio
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
-export class Home implements OnInit{
+export class Home implements OnInit {
 
   // private httpClient = inject(HttpClient);
 
   private transactionsService = inject(TransactionsService);
+  private feedbackService = inject(FeedbackService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private confirmationDialogService = inject(ConfirmationDialogService)
 
   transactions = signal<Transaction[]>([]);
 
 
   ngOnInit() {
     this.getTransaction();
+  }
+
+  editTransaction(transaction: Transaction) {
+    this.router.navigate(['edit', transaction.id]);
+  }
+
+  removeTransaction(transaction: Transaction) {
+
+    this.confirmationDialogService.open({
+      title: 'Remover transação',
+      message: 'Tem certeza que deseja remover esta transação?',
+    }).subscribe({
+      next: () => {
+        this.transactionsService.delete(transaction.id).subscribe({
+          next: () => {
+            this.removeTransactionFromArray(transaction);
+            this.feedbackService.success('Transação removida com sucesso');
+          }
+        });
+      }
+    })
+
+
+  }
+
+  private removeTransactionFromArray(transaction: Transaction) {
+    this.transactions.update(transactions =>
+      transactions.filter(item => item.id !== transaction.id)
+    );
   }
 
   private getTransaction() {
@@ -48,8 +84,5 @@ export class Home implements OnInit{
     })
   }
 
-  editTransaction(transaction: Transaction) {
-    this.router.navigate(['edit', transaction.id]);
-  }
 
 }

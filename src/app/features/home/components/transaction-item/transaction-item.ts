@@ -16,4 +16,6 @@ export class TransactionItem {
   transaction = input.required<Transaction>();
 
   editTransaction = output<Transaction>();
+
+  removeTransaction = output<Transaction>();
 }
