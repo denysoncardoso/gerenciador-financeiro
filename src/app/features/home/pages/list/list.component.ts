@@ -1,19 +1,17 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {Balance} from './components/balance/balance';
-import {TransactionItem} from './components/transaction-item/transaction-item';
-import {Transaction} from '../../shared/transactions/interfaces/transaction';
-import {NoTransactions} from './components/no-transactions/no-transactions';
-import {MatButtonModule} from '@angular/material/button';
+import {Component, inject, signal} from '@angular/core';
+import {MatButton, MatButtonModule} from '@angular/material/button';
 import {Router, RouterLink} from '@angular/router';
-import {TransactionsService} from '../../shared/transactions/services/transactions.service';
-import {FeedbackService} from '../../shared/feedback/services/feedback.service';
+import {TransactionsService} from '../../../../shared/transactions/services/transactions.service';
+import {FeedbackService} from '../../../../shared/feedback/services/feedback.service';
 import {MatDialog} from '@angular/material/dialog';
-import {filter} from 'rxjs';
-import {ConfirmationDialogService} from '../../shared/dialog/confirmation/services/confirmation-dialog.service';
-
+import {ConfirmationDialogService} from '../../../../shared/dialog/confirmation/services/confirmation-dialog.service';
+import {Transaction} from '../../../../shared/transactions/interfaces/transaction';
+import {TransactionItem} from './components/transaction-item/transaction-item';
+import {Balance} from './components/balance/balance';
+import {NoTransactions} from './components/no-transactions/no-transactions';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-list',
   imports: [
     Balance,
     TransactionItem,
@@ -21,10 +19,10 @@ import {ConfirmationDialogService} from '../../shared/dialog/confirmation/servic
     MatButtonModule,
     RouterLink,
   ],
-  templateUrl: './home.html',
-  styleUrl: './home.scss'
+  templateUrl: './list.component.html',
+  styleUrl: './list.component.scss'
 })
-export class Home implements OnInit {
+export class ListComponent {
 
   // private httpClient = inject(HttpClient);
 
@@ -83,6 +81,5 @@ export class Home implements OnInit {
       }
     })
   }
-
 
 }

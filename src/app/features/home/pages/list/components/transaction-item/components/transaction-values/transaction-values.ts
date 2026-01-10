@@ -1,7 +1,7 @@
 import {Component, computed, input} from '@angular/core';
-import {Transaction} from '../../../../../../shared/transactions/interfaces/transaction';
 import {CurrencyPipe} from '@angular/common';
-import {TransactionType} from '../../../../../../shared/transactions/enums/transactions-types';
+import {TransactionType} from '../../../../../../../../shared/transactions/enums/transactions-types';
+import {Transaction} from '../../../../../../../../shared/transactions/interfaces/transaction';
 
 const CssClass = {
   [TransactionType.income]: 'income',
